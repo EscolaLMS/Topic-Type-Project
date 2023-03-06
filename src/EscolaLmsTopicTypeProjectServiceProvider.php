@@ -9,7 +9,6 @@ use EscolaLms\TopicTypeProject\Http\Resources\TopicType\Admin\ProjectResource as
 use EscolaLms\TopicTypeProject\Http\Resources\TopicType\Client\ProjectResource as ClientProjectResource;
 use EscolaLms\TopicTypeProject\Http\Resources\TopicType\Export\ProjectResource as ExportProjectResource;
 use EscolaLms\TopicTypeProject\Models\Project;
-
 use EscolaLms\TopicTypes\EscolaLmsTopicTypesServiceProvider;
 use Illuminate\Support\ServiceProvider;
 
