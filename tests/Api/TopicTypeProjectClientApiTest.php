@@ -20,7 +20,10 @@ class TopicTypeProjectClientApiTest extends TestCase
         $this->seed(CoursesPermissionSeeder::class);
 
         $this->user = $this->makeAdmin();
-        $this->topic = Topic::factory()->create();
+        $this->topic = Topic::factory()
+            ->for(Lesson::factory()
+                ->for(Course::factory()))
+            ->create();
     }
 
     public function testGetProjectTopic(): void

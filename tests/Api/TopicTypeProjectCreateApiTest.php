@@ -4,6 +4,7 @@ namespace EscolaLms\TopicTypeProject\Tests\Api;
 
 use EscolaLms\Core\Tests\CreatesUsers;
 use EscolaLms\Courses\Database\Seeders\CoursesPermissionSeeder;
+use EscolaLms\Courses\Models\Course;
 use EscolaLms\Courses\Models\Lesson;
 use EscolaLms\TopicTypeProject\Models\Project;
 use EscolaLms\TopicTypeProject\Tests\TestCase;
@@ -20,7 +21,9 @@ class TopicTypeProjectCreateApiTest extends TestCase
 
     public function testCreateTopicProject(): void
     {
-        $lesson = Lesson::factory()->create();
+        $lesson = Lesson::factory()
+            ->for(Course::factory())
+            ->create();
 
         $this->response = $this->actingAs($this->makeAdmin(), 'api')
             ->postJson('/api/admin/topics', [
