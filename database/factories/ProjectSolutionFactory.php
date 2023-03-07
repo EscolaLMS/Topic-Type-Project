@@ -16,13 +16,13 @@ class ProjectSolutionFactory extends Factory
 
     public function definition(): array
     {
+        $course = Course::factory()->state(['status' => CourseStatusEnum::PUBLISHED])->create();
+        $lesson = Lesson::factory()->state(['course_id' => $course->getKey()])->create();
+
         return [
             'path' => $this->faker->filePath(),
             'user_id' => User::factory(),
-            'topic_id' => Topic::factory()
-                ->has(Lesson::factory()
-                    ->has(Course::factory()->state(['status' => CourseStatusEnum::PUBLISHED]))
-                )
+            'topic_id' => Topic::factory()->state(['lesson_id' => $lesson->getKey()]),
         ];
     }
 }
