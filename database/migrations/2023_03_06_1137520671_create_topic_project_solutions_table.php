@@ -10,8 +10,8 @@ class CreateTopicProjectSolutionsTable extends Migration
     {
         Schema::create('topic_project_solutions', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('topic_id')->constrained('topics');
-            $table->foreignId('user_id')->constrained('users');
+            $table->foreignId('topic_id')->constrained('topics')->cascadeOnDelete();
+            $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
             $table->string('path');
             $table->timestamps();
         });
