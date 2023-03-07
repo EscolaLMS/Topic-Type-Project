@@ -9,6 +9,10 @@ use EscolaLms\TopicTypeProject\Http\Resources\TopicType\Admin\ProjectResource as
 use EscolaLms\TopicTypeProject\Http\Resources\TopicType\Client\ProjectResource as ClientProjectResource;
 use EscolaLms\TopicTypeProject\Http\Resources\TopicType\Export\ProjectResource as ExportProjectResource;
 use EscolaLms\TopicTypeProject\Models\Project;
+use EscolaLms\TopicTypeProject\Repositories\Contracts\ProjectSolutionRepositoryContract;
+use EscolaLms\TopicTypeProject\Repositories\ProjectSolutionRepository;
+use EscolaLms\TopicTypeProject\Services\ProjectSolutionService;
+use EscolaLms\TopicTypeProject\Services\Contracts\ProjectSolutionServiceContract;
 use EscolaLms\TopicTypes\EscolaLmsTopicTypesServiceProvider;
 use Illuminate\Support\ServiceProvider;
 
@@ -17,9 +21,13 @@ use Illuminate\Support\ServiceProvider;
  */
 class EscolaLmsTopicTypeProjectServiceProvider extends ServiceProvider
 {
-    public const SERVICES = [];
+    public const SERVICES = [
+        ProjectSolutionServiceContract::class => ProjectSolutionService::class,
+    ];
 
-    public const REPOSITORIES = [];
+    public const REPOSITORIES = [
+        ProjectSolutionRepositoryContract::class => ProjectSolutionRepository::class,
+    ];
 
     public $singletons = self::SERVICES + self::REPOSITORIES;
 

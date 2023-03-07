@@ -28,7 +28,7 @@ use Illuminate\Support\Carbon;
  */
 
 /**
- * EscolaLms\TopicTypeProject\Models\TopicContent\Project
+ * EscolaLms\TopicTypeProject\Models\Project
  *
  * @property int $id
  * @property string $value
