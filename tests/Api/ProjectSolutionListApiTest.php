@@ -8,10 +8,8 @@ use EscolaLms\Courses\Models\Course;
 use EscolaLms\Courses\Models\Lesson;
 use EscolaLms\Courses\Models\Topic;
 use EscolaLms\TopicTypeProject\Database\Seeders\TopicTypeProjectPermissionSeeder;
-use EscolaLms\TopicTypeProject\Models\Project;
 use EscolaLms\TopicTypeProject\Models\ProjectSolution;
 use EscolaLms\TopicTypeProject\Tests\TestCase;
-use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 
 class ProjectSolutionListApiTest extends TestCase
@@ -57,5 +55,36 @@ class ProjectSolutionListApiTest extends TestCase
                     'file_url',
                 ]],
             ]);
+    }
+
+    public function testListProjectSolutionFiltering(): void
+    {
+        $student = $this->makeStudent();
+        $course = Course::factory()->state(['status' => CourseStatusEnum::PUBLISHED])->create();
+        $lesson = Lesson::factory()->state(['course_id' => $course->getKey()])->create();
+        $topic = Topic::factory()->state(['lesson_id' => $lesson->getKey()])->create();
+
+        ProjectSolution::factory()
+            ->state([
+                'user_id' => $student->getKey(),
+                'topic_id' => $topic->getKey(),
+            ])
+            ->count(4)
+            ->create();
+
+        ProjectSolution::factory()
+            ->state(['user_id' => $student->getKey()])
+            ->count(2)
+            ->create();
+
+        $this->actingAs($student, 'api')
+            ->getJson('api/topic-project-solutions')
+            ->assertOk()
+            ->assertJsonCount(6, 'data');
+
+        $this->actingAs($student, 'api')
+            ->getJson('api/topic-project-solutions?course_id=' . $course->getKey())
+            ->assertOk()
+            ->assertJsonCount(4, 'data');
     }
 }
