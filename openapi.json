@@ -70,6 +70,15 @@
                         }
                     },
                     {
+                        "name": "course_id",
+                        "in": "query",
+                        "description": "course id",
+                        "required": false,
+                        "schema": {
+                            "type": "number"
+                        }
+                    },
+                    {
                         "name": "user_id",
                         "in": "query",
                         "description": "user id",
@@ -179,6 +188,15 @@
                         "schema": {
                             "type": "number",
                             "default": 15
+                        }
+                    },
+                    {
+                        "name": "course_id",
+                        "in": "query",
+                        "description": "course id",
+                        "required": false,
+                        "schema": {
+                            "type": "number"
                         }
                     },
                     {
