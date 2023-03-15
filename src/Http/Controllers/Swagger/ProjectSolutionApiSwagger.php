@@ -57,6 +57,15 @@ interface ProjectSolutionApiSwagger
      *          ),
      *      ),
      *      @OA\Parameter(
+     *          name="course_id",
+     *          description="course id",
+     *          required=false,
+     *          in="query",
+     *          @OA\Schema(
+     *              type="number",
+     *          ),
+     *      ),
+     *      @OA\Parameter(
      *          name="topic_id",
      *          description="topic id",
      *          required=false,

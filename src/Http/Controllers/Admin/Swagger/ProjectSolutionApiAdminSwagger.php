@@ -65,6 +65,15 @@ interface ProjectSolutionApiAdminSwagger
      *          ),
      *      ),
      *      @OA\Parameter(
+     *          name="course_id",
+     *          description="course id",
+     *          required=false,
+     *          in="query",
+     *          @OA\Schema(
+     *              type="number",
+     *          ),
+     *      ),
+     *      @OA\Parameter(
      *          name="user_id",
      *          description="user id",
      *          required=false,
