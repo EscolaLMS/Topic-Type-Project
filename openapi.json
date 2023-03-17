@@ -361,6 +361,13 @@
                     "value": {
                         "description": "value",
                         "type": "string"
+                    },
+                    "notify_users": {
+                        "description": "notify_users",
+                        "type": "array",
+                        "items": {
+                            "type": "integer"
+                        }
                     }
                 },
                 "type": "object"
