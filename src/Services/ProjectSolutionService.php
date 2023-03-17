@@ -2,10 +2,12 @@
 
 namespace EscolaLms\TopicTypeProject\Services;
 
+use EscolaLms\Core\Models\User;
 use EscolaLms\Core\Repositories\Criteria\Primitives\EqualCriterion;
 use EscolaLms\TopicTypeProject\Dtos\CreateProjectSolutionDto;
 use EscolaLms\TopicTypeProject\Dtos\CriteriaDto;
 use EscolaLms\TopicTypeProject\Dtos\PageDto;
+use EscolaLms\TopicTypeProject\Events\ProjectSolutionCreatedEvent;
 use EscolaLms\TopicTypeProject\Models\ProjectSolution;
 use EscolaLms\TopicTypeProject\Repositories\Contracts\ProjectSolutionRepositoryContract;
 use EscolaLms\TopicTypeProject\Services\Contracts\ProjectSolutionServiceContract;
@@ -40,13 +42,15 @@ class ProjectSolutionService implements ProjectSolutionServiceContract
     {
         $path = $dto->getFile()->storePublicly(self::DIR . DIRECTORY_SEPARATOR . $dto->getTopicId() . DIRECTORY_SEPARATOR . $dto->getUserId());
 
-        /** @var ProjectSolution $model */
-        $model = $this->projectSolutionRepository->create(array_merge($dto->toArray(), [
+        /** @var ProjectSolution $projectSolution */
+        $projectSolution = $this->projectSolutionRepository->create(array_merge($dto->toArray(), [
                 'path' => $path,
             ])
         );
 
-        return $model;
+        $this->notify($projectSolution);
+
+        return $projectSolution;
     }
 
     public function delete(int $id): void
@@ -54,5 +58,15 @@ class ProjectSolutionService implements ProjectSolutionServiceContract
         $solution = $this->projectSolutionRepository->findById($id);
         Storage::delete($solution->path);
         $this->projectSolutionRepository->delete($id);
+    }
+
+    private function notify(ProjectSolution $projectSolution): void
+    {
+        $project = $projectSolution->topic->topicable;
+        $notifyUsers = User::findMany($project->notify_users);
+
+        collect($notifyUsers)->each(function ($user) use ($projectSolution) {
+            event(new ProjectSolutionCreatedEvent($user, $projectSolution));
+        });
     }
 }
