@@ -2,6 +2,7 @@
 
 namespace EscolaLms\TopicTypeProject\Tests\Api;
 
+use EscolaLms\Core\Models\User;
 use EscolaLms\Core\Tests\CreatesUsers;
 use EscolaLms\Courses\Enum\CourseStatusEnum;
 use EscolaLms\Courses\Models\Course;
@@ -24,7 +25,6 @@ class ProjectSolutionCreateApiTest extends TestCase
     {
         parent::setUp();
 
-        Event::fake();
         Storage::fake();
 
         $this->seed(TopicTypeProjectPermissionSeeder::class);
@@ -34,8 +34,11 @@ class ProjectSolutionCreateApiTest extends TestCase
             ->for(Lesson::factory()->state(['course_id' => $this->course->getKey()]))
             ->create();
 
-        $project = Project::factory()->state(['notify_users' => [1, 5]])->create();
+        $this->userIds = User::factory()->count(2)->create()->pluck('id');
+        $project = Project::factory()->state(['notify_users' => $this->userIds->toArray()])->create();
         $this->topic->topicable()->associate($project)->save();
+
+        Event::fake();
     }
 
     public function testCreateProjectSolutionUnauthorized(): void
@@ -82,7 +85,7 @@ class ProjectSolutionCreateApiTest extends TestCase
 
         Event::assertDispatchedTimes(ProjectSolutionCreatedEvent::class, 2);
         Event::assertDispatched(ProjectSolutionCreatedEvent::class, function (ProjectSolutionCreatedEvent $event) {
-            return collect([1, 5])->contains($event->getUser()->getKey());
+            return $this->userIds->contains($event->getUser()->getKey());
         });
-}
+    }
 }
