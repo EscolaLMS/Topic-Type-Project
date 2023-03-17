@@ -31,14 +31,14 @@ class TopicTypeProjectCreateApiTest extends TestCase
                 'lesson_id' => $lesson->getKey(),
                 'topicable_type' => Project::class,
                 'value' => 'lorem ipsum',
+                'notify_users' => [1, 2, 3]
             ])
             ->assertCreated();
 
         $data = $this->response->getData()->data;
-        $value = $data->topicable->value;
+        $project = Project::find($data->topicable->id);
 
-        $this->assertDatabaseHas('topic_projects', [
-            'value' => $value,
-        ]);
+        $this->assertEquals('lorem ipsum', $project->value);
+        $this->assertEquals([1, 2, 3], $project->notify_users);
     }
 }

@@ -33,21 +33,20 @@ class TopicTypeProjectUpdateApiTest extends TestCase
 
         $response = $this->actingAs($this->user, 'api')
             ->postJson('/api/admin/topics/' . $this->topic->getKey(), [
-                    'title' => 'Hello World',
-                    'lesson_id' => $this->topic->lesson_id,
-                    'topicable_type' => Project::class,
-                    'value' => 'lorem ipsum',
+                'title' => 'Hello World',
+                'lesson_id' => $this->topic->lesson_id,
+                'topicable_type' => Project::class,
+                'value' => 'lorem ipsum',
+                'notify_users' => [1, 3, 5]
             ])
             ->assertOk();
 
         $data = $response->getData()->data;
-        $value = $data->topicable->value;
+        $project = Project::find($data->topicable->id);
 
-        $this->topicId = $data->id;
+        $this->assertEquals('lorem ipsum', $project->value);
+        $this->assertEquals([1, 3, 5], $project->notify_users);
 
-        $this->assertDatabaseHas('topic_projects', [
-            'value' => $value,
-        ]);
         Event::assertDispatched(TopicTypeChanged::class, function ($event) {
             return $event->getUser() === $this->user && $event->getTopicContent();
         });

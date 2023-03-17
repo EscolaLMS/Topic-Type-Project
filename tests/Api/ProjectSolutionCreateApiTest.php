@@ -8,10 +8,12 @@ use EscolaLms\Courses\Models\Course;
 use EscolaLms\Courses\Models\Lesson;
 use EscolaLms\Courses\Models\Topic;
 use EscolaLms\TopicTypeProject\Database\Seeders\TopicTypeProjectPermissionSeeder;
+use EscolaLms\TopicTypeProject\Events\ProjectSolutionCreatedEvent;
 use EscolaLms\TopicTypeProject\Models\Project;
 use EscolaLms\TopicTypeProject\Models\ProjectSolution;
 use EscolaLms\TopicTypeProject\Tests\TestCase;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Storage;
 
 class ProjectSolutionCreateApiTest extends TestCase
@@ -22,7 +24,9 @@ class ProjectSolutionCreateApiTest extends TestCase
     {
         parent::setUp();
 
+        Event::fake();
         Storage::fake();
+
         $this->seed(TopicTypeProjectPermissionSeeder::class);
 
         $this->course = Course::factory()->state(['status' => CourseStatusEnum::PUBLISHED])->create();
@@ -30,7 +34,7 @@ class ProjectSolutionCreateApiTest extends TestCase
             ->for(Lesson::factory()->state(['course_id' => $this->course->getKey()]))
             ->create();
 
-        $project = Project::factory()->create();
+        $project = Project::factory()->state(['notify_users' => [1, 5]])->create();
         $this->topic->topicable()->associate($project)->save();
     }
 
@@ -41,6 +45,8 @@ class ProjectSolutionCreateApiTest extends TestCase
             'file' => UploadedFile::fake(),
         ])
             ->assertUnauthorized();
+
+        Event::assertNotDispatched(ProjectSolutionCreatedEvent::class);
     }
 
     public function testCreateProjectSolutionForbidden(): void
@@ -51,6 +57,8 @@ class ProjectSolutionCreateApiTest extends TestCase
                 'file' => UploadedFile::fake(),
             ])
             ->assertForbidden();
+
+        Event::assertNotDispatched(ProjectSolutionCreatedEvent::class);
     }
 
     public function testCreateProjectSolution(): void
@@ -71,5 +79,10 @@ class ProjectSolutionCreateApiTest extends TestCase
         $this->assertEquals($this->topic->getKey(), $solution->topic_id);
         $this->assertEquals($student->getKey(), $solution->user_id);
         Storage::assertExists($solution->path);
-    }
+
+        Event::assertDispatchedTimes(ProjectSolutionCreatedEvent::class, 2);
+        Event::assertDispatched(ProjectSolutionCreatedEvent::class, function (ProjectSolutionCreatedEvent $event) {
+            return collect([1, 5])->contains($event->getUser()->getKey());
+        });
+}
 }
