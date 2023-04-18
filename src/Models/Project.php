@@ -77,6 +77,11 @@ class Project extends AbstractTopicContent
         return ProjectFactory::new();
     }
 
+    public function setNotifyUsersAttribute($value): void
+    {
+        $this->attributes['notify_users'] = json_encode(array_filter($value), JSON_NUMERIC_CHECK);
+    }
+
     public function fixAssetPaths(): array
     {
         $topic = $this->topic;
