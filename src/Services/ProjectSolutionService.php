@@ -40,7 +40,10 @@ class ProjectSolutionService implements ProjectSolutionServiceContract
 
     public function create(CreateProjectSolutionDto $dto): ProjectSolution
     {
-        $path = $dto->getFile()->storePublicly(self::DIR . DIRECTORY_SEPARATOR . $dto->getTopicId() . DIRECTORY_SEPARATOR . $dto->getUserId());
+        $path = $dto->getFile()->storeAs(
+            self::DIR . DIRECTORY_SEPARATOR . $dto->getTopicId() . DIRECTORY_SEPARATOR . $dto->getUserId(),
+            $dto->getFile()->getClientOriginalName(),
+        );
 
         /** @var ProjectSolution $projectSolution */
         $projectSolution = $this->projectSolutionRepository->create(array_merge($dto->toArray(), [

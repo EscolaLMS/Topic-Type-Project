@@ -16,6 +16,7 @@ use EscolaLms\TopicTypeProject\Tests\TestCase;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class ProjectSolutionCreateApiTest extends TestCase
 {
@@ -69,12 +70,20 @@ class ProjectSolutionCreateApiTest extends TestCase
         $student = $this->makeStudent();
         $this->course->users()->sync($student);
 
-        $this->actingAs($student, 'api')
+        $response = $this->actingAs($student, 'api')
             ->postJson('api/topic-project-solutions', [
                 'topic_id' => $this->topic->getKey(),
                 'file' => UploadedFile::fake()->create('solution.zip'),
-            ])
-            ->assertCreated();
+            ]);
+
+        $response
+            ->assertCreated()
+            ->assertJsonFragment([
+                'file_name' => 'solution.zip',
+            ]);
+
+        $this->assertTrue(Str::contains($response->json('data.file_url'), 'solution.zip'));
+
 
         /** @var ProjectSolution $solution */
         $solution = ProjectSolution::query()->latest()->first();

@@ -50,6 +50,7 @@ class ProjectSolutionResource extends JsonResource
             'id' => $this->getKey(),
             'created_at' => $this->created_at,
             'file_url' => Storage::url($this->path),
+            'file_name' => basename($this->path),
             'topic_id' => $this->topic_id,
             'user_id' => $this->user_id,
         ];
