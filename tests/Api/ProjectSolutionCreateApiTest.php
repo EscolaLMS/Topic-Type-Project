@@ -76,8 +76,14 @@ class ProjectSolutionCreateApiTest extends TestCase
                 'file' => UploadedFile::fake()->create('solution.zip'),
             ]);
 
-        $response->assertCreated();
+        $response
+            ->assertCreated()
+            ->assertJsonFragment([
+                'file_name' => 'solution.zip',
+            ]);
+
         $this->assertTrue(Str::contains($response->json('data.file_url'), 'solution.zip'));
+
 
         /** @var ProjectSolution $solution */
         $solution = ProjectSolution::query()->latest()->first();
