@@ -13,8 +13,8 @@
 This package is another [TopicType](https://github.com/EscolaLMS/topic-types). It allows students to upload their solutions as files.
 This type is used for building headless Course.
 
-When creating course content in the Admin Panel, you can create a topic of type "Project." During the course, students can upload files with their solutions.
-There is a tab in the Admin Panel to preview students' solutions.
+The package by default grants students permissions to add and view their own solutions within the course.
+Administrators have permissions to display the list of all student solutions, as well as to download and delete them.
 
 ## Installing
 
