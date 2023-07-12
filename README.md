@@ -20,7 +20,7 @@ Administrators have permissions to display the list of all student solutions, as
 
 - `composer require escolalms/topic-type-project`
 - `php artisan migrate`
-- `php artisan db:seed --class="https://github.com/EscolaLMS/Topic-Type-Project/blob/main/database/seeders/TopicTypeProjectPermissionSeeder.php"`
+- `php artisan db:seed --class="EscolaLms\TopicTypeProject\Database\Seeders\TopicTypeProjectPermissionSeeder"`
 
 ## Endpoints
 
