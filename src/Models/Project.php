@@ -82,22 +82,6 @@ class Project extends AbstractTopicContent
         $this->attributes['notify_users'] = json_encode(array_filter($value), JSON_NUMERIC_CHECK);
     }
 
-    public function fixAssetPaths(): array
-    {
-        $topic = $this->topic;
-        $course = $topic->lesson->course;
-        $destinationPrefix = sprintf('course/%d/topic/%d/', $course->id, $topic->id);
-
-        $result = Markdown::convertImagesPathsForImageApi($this->value, $destinationPrefix);
-
-        if ($result['value'] !== $this->value) {
-            $this->value = $result['value'];
-            $this->save();
-        }
-
-        return $result['results'];
-    }
-
     public function getMorphClass()
     {
         return self::class;
