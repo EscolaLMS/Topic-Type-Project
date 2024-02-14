@@ -3,10 +3,10 @@
     "description": "Escola Headless LMS Topic Type Project",
     "type": "package",
     "require": {
-        "php": "^7.4|^8.0|^8.1",
+        "php": ">=7.4",
         "escolalms/auth": "^0",
         "escolalms/core": "^1",
-        "laravel/framework": "^8|^9",
+        "laravel/framework": ">=8.0",
         "escolalms/topic-types": "^0"
     },
     "require-dev": {
