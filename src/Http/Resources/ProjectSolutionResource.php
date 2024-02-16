@@ -37,9 +37,6 @@ use Illuminate\Support\Facades\Storage;
  *      ),
  * )
  *
- */
-
-/**
  * @mixin ProjectSolution
  */
 class ProjectSolutionResource extends JsonResource
