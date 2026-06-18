@@ -38,4 +38,17 @@ class TopicTypeProjectClientApiTest extends TestCase
                 'topicable_type' => Project::class,
             ]);
     }
+
+    public function testGetProjectTopicReturnsCountsToGrade(): void
+    {
+        $project = Project::factory()->create(['counts_to_grade' => true]);
+        $this->topic->topicable()->associate($project)->save();
+
+        $this->actingAs($this->user, 'api')
+            ->getJson('/api/admin/topics/' . $this->topic->getKey())
+            ->assertOk()
+            ->assertJsonFragment([
+                'counts_to_grade' => true,
+            ]);
+    }
 }

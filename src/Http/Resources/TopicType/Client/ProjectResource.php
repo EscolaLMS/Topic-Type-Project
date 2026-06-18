@@ -16,7 +16,8 @@ class ProjectResource extends JsonResource implements TopicTypeResourceContract
         return [
             'id' => $this->id,
             'value' => $this->value,
-            'notify_users' => $this->notify_users
+            'notify_users' => $this->notify_users,
+            'counts_to_grade' => $this->counts_to_grade,
         ];
     }
 }

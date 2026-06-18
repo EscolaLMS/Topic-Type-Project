@@ -13,6 +13,7 @@ class ProjectFactory extends Factory
     {
         return [
             'value' => $this->faker->text(),
+            'counts_to_grade' => $this->faker->boolean(),
         ];
     }
 }

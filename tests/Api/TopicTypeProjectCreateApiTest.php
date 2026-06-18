@@ -65,6 +65,48 @@ class TopicTypeProjectCreateApiTest extends TestCase
         $this->assertEquals([], $project->notify_users);
     }
 
+    public function testCreateTopicProjectDefaultsCountsToGradeToFalse(): void
+    {
+        $lesson = Lesson::factory()
+            ->for(Course::factory())
+            ->create();
+
+        $this->response = $this->actingAs($this->makeAdmin(), 'api')
+            ->postJson('/api/admin/topics', [
+                'title' => 'Hello World',
+                'lesson_id' => $lesson->getKey(),
+                'topicable_type' => Project::class,
+                'value' => 'lorem ipsum',
+            ])
+            ->assertCreated();
+
+        $project = Project::find($this->response->getData()->data->topicable->id);
+
+        $this->assertFalse($project->counts_to_grade);
+    }
+
+    public function testCreateTopicProjectWithCountsToGrade(): void
+    {
+        $lesson = Lesson::factory()
+            ->for(Course::factory())
+            ->create();
+
+        $this->response = $this->actingAs($this->makeAdmin(), 'api')
+            ->postJson('/api/admin/topics', [
+                'title' => 'Hello World',
+                'lesson_id' => $lesson->getKey(),
+                'topicable_type' => Project::class,
+                'value' => 'lorem ipsum',
+                'counts_to_grade' => true,
+            ])
+            ->assertCreated()
+            ->assertJsonFragment(['counts_to_grade' => true]);
+
+        $project = Project::find($this->response->getData()->data->topicable->id);
+
+        $this->assertTrue($project->counts_to_grade);
+    }
+
     public function testCreateTopicProjectNotifyUsersNullArray(): void
     {
         $lesson = Lesson::factory()

@@ -51,4 +51,22 @@ class TopicTypeProjectUpdateApiTest extends TestCase
             return $event->getUser() === $this->user && $event->getTopicContent();
         });
     }
+
+    public function testUpdateTopicProjectAcceptsCountsToGrade(): void
+    {
+        $response = $this->actingAs($this->user, 'api')
+            ->postJson('/api/admin/topics/' . $this->topic->getKey(), [
+                'title' => 'Hello World',
+                'lesson_id' => $this->topic->lesson_id,
+                'topicable_type' => Project::class,
+                'value' => 'lorem ipsum',
+                'counts_to_grade' => true,
+            ])
+            ->assertOk()
+            ->assertJsonFragment(['counts_to_grade' => true]);
+
+        $project = Project::find($response->getData()->data->topicable->id);
+
+        $this->assertTrue($project->counts_to_grade);
+    }
 }
