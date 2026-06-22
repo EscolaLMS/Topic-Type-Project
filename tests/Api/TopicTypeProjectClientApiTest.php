@@ -41,11 +41,15 @@ class TopicTypeProjectClientApiTest extends TestCase
 
     public function testGetProjectTopicReturnsCountsToGrade(): void
     {
+        // Topicable content is only serialized for an active lesson (courses TopicResource).
+        $topic = Topic::factory()
+            ->for(Lesson::factory()->state(['active' => true])->for(Course::factory()))
+            ->create();
         $project = Project::factory()->create(['counts_to_grade' => true]);
-        $this->topic->topicable()->associate($project)->save();
+        $topic->topicable()->associate($project)->save();
 
         $this->actingAs($this->user, 'api')
-            ->getJson('/api/admin/topics/' . $this->topic->getKey())
+            ->getJson('/api/admin/topics/' . $topic->getKey())
             ->assertOk()
             ->assertJsonFragment([
                 'counts_to_grade' => true,
