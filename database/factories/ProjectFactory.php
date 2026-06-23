@@ -14,6 +14,7 @@ class ProjectFactory extends Factory
         return [
             'value' => $this->faker->text(),
             'counts_to_grade' => $this->faker->boolean(),
+            'max_score' => $this->faker->numberBetween(1, 100),
         ];
     }
 }

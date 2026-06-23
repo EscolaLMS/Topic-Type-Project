@@ -6,6 +6,7 @@ use EscolaLms\Core\Models\User;
 use EscolaLms\Core\Repositories\Criteria\Primitives\EqualCriterion;
 use EscolaLms\TopicTypeProject\Dtos\CreateProjectSolutionDto;
 use EscolaLms\TopicTypeProject\Dtos\CriteriaDto;
+use EscolaLms\TopicTypeProject\Dtos\GradeProjectSolutionDto;
 use EscolaLms\TopicTypeProject\Dtos\PageDto;
 use EscolaLms\TopicTypeProject\Events\ProjectSolutionCreatedEvent;
 use EscolaLms\TopicTypeProject\Models\ProjectSolution;
@@ -61,6 +62,16 @@ class ProjectSolutionService implements ProjectSolutionServiceContract
         $solution = $this->projectSolutionRepository->findById($id);
         Storage::delete($solution->path);
         $this->projectSolutionRepository->delete($id);
+    }
+
+    public function grade(int $id, GradeProjectSolutionDto $dto): ProjectSolution
+    {
+        $solution = $this->projectSolutionRepository->findById($id);
+        $solution->update(array_merge($dto->toArray(), [
+            'graded_at' => now(),
+        ]));
+
+        return $solution;
     }
 
     private function notify(ProjectSolution $projectSolution): void

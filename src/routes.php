@@ -8,6 +8,7 @@ Route::prefix('api')->middleware(['auth:api'])->group(function () {
     Route::prefix('admin')->group(function () {
         Route::prefix('topic-project-solutions')->group(function () {
             Route::get(null, [ProjectSolutionApiAdminController::class, 'index']);
+            Route::patch('{id}/grade', [ProjectSolutionApiAdminController::class, 'grade']);
             Route::delete('{id}', [ProjectSolutionApiAdminController::class, 'delete']);
         });
     });

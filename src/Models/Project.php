@@ -36,6 +36,11 @@ use Illuminate\Support\Carbon;
  *          property="counts_to_grade",
  *          description="whether the project counts towards the final grade",
  *          type="boolean"
+ *      ),
+ *      @OA\Property(
+ *          property="max_score",
+ *          description="maximum obtainable score for the project (same for all solutions)",
+ *          type="number"
  *      )
  * )
  */
@@ -47,6 +52,7 @@ use Illuminate\Support\Carbon;
  * @property string $value
  * @property array $notify_users
  * @property bool $counts_to_grade
+ * @property ?float $max_score
  * @property Carbon $created_at
  * @property Carbon $updated_at
  *
@@ -60,6 +66,7 @@ class Project extends AbstractTopicContent
     protected $casts = [
         'notify_users' => 'array',
         'counts_to_grade' => 'boolean',
+        'max_score' => 'float',
     ];
 
     protected $attributes = [
@@ -70,6 +77,7 @@ class Project extends AbstractTopicContent
         'value',
         'notify_users',
         'counts_to_grade',
+        'max_score',
     ];
 
     public static function rules(): array
@@ -78,6 +86,7 @@ class Project extends AbstractTopicContent
             'value' => ['required', 'string'],
             'notify_users' => ['array'],
             'counts_to_grade' => ['boolean'],
+            'max_score' => ['nullable', 'numeric', 'min:1'],
         ];
     }
 

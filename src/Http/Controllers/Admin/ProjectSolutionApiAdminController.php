@@ -5,6 +5,7 @@ namespace EscolaLms\TopicTypeProject\Http\Controllers\Admin;
 use EscolaLms\Core\Http\Controllers\EscolaLmsBaseController;
 use EscolaLms\TopicTypeProject\Http\Controllers\Admin\Swagger\ProjectSolutionApiAdminSwagger;
 use EscolaLms\TopicTypeProject\Http\Requests\Admin\AdminDeleteProjectSolutionRequest;
+use EscolaLms\TopicTypeProject\Http\Requests\Admin\AdminGradeProjectSolutionRequest;
 use EscolaLms\TopicTypeProject\Http\Requests\Admin\AdminListProjectSolutionRequest;
 use EscolaLms\TopicTypeProject\Http\Resources\ProjectSolutionResource;
 use EscolaLms\TopicTypeProject\Services\Contracts\ProjectSolutionServiceContract;
@@ -31,5 +32,18 @@ class ProjectSolutionApiAdminController extends EscolaLmsBaseController implemen
         $this->projectSolutionService->delete($request->route('id'));
 
         return $this->sendSuccess(__('Project solution deleted successfully'));
+    }
+
+    public function grade(AdminGradeProjectSolutionRequest $request): JsonResponse
+    {
+        $solution = $this->projectSolutionService->grade(
+            (int) $request->route('id'),
+            $request->getGradeProjectSolutionDto()
+        );
+
+        return $this->sendResponseForResource(
+            ProjectSolutionResource::make($solution),
+            __('Project solution graded successfully')
+        );
     }
 }

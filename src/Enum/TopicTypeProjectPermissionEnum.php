@@ -12,4 +12,5 @@ class TopicTypeProjectPermissionEnum extends BasicEnum
 
     public const LIST_PROJECT_SOLUTION = 'project-solution_list';
     public const DELETE_PROJECT_SOLUTION = 'project-solution_delete';
+    public const UPDATE_PROJECT_SOLUTION = 'project-solution_update';
 }

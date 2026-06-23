@@ -3,6 +3,7 @@
 namespace EscolaLms\TopicTypeProject\Http\Controllers\Admin\Swagger;
 
 use EscolaLms\TopicTypeProject\Http\Requests\Admin\AdminDeleteProjectSolutionRequest;
+use EscolaLms\TopicTypeProject\Http\Requests\Admin\AdminGradeProjectSolutionRequest;
 use EscolaLms\TopicTypeProject\Http\Requests\Admin\AdminListProjectSolutionRequest;
 use Illuminate\Http\JsonResponse;
 
@@ -152,4 +153,55 @@ interface ProjectSolutionApiAdminSwagger
      * )
      */
     public function delete(AdminDeleteProjectSolutionRequest $request): JsonResponse;
+
+    /**
+     * @OA\Patch(
+     *      path="/api/admin/topic-project-solutions/{id}/grade",
+     *      summary="Grade the specified Project Solution",
+     *      tags={"Admin Project Solution"},
+     *      description="Set score and max_score for a Project Solution",
+     *      security={
+     *          {"passport": {}},
+     *      },
+     *      @OA\Parameter(
+     *          name="id",
+     *          description="ID",
+     *          @OA\Schema(
+     *             type="integer",
+     *         ),
+     *          required=true,
+     *          in="path"
+     *      ),
+     *      @OA\RequestBody(
+     *          required=true,
+     *          @OA\MediaType(
+     *              mediaType="application/json",
+     *              @OA\Schema(ref="#/components/schemas/AdminGradeProjectSolutionRequest")
+     *          ),
+     *      ),
+     *      @OA\Response(
+     *          response=200,
+     *          description="successful operation",
+     *          @OA\MediaType(
+     *              mediaType="application/json"
+     *          ),
+     *          @OA\Schema(
+     *              type="object",
+     *              @OA\Property(
+     *                  property="success",
+     *                  type="boolean"
+     *              ),
+     *              @OA\Property(
+     *                  property="data",
+     *                  ref="#/components/schemas/ProjectSolutionResource"
+     *              ),
+     *              @OA\Property(
+     *                  property="message",
+     *                  type="string"
+     *              )
+     *          )
+     *      )
+     * )
+     */
+    public function grade(AdminGradeProjectSolutionRequest $request): JsonResponse;
 }

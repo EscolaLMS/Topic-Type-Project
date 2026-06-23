@@ -35,6 +35,22 @@ use Illuminate\Support\Facades\Storage;
  *          description="user_id",
  *          type="number"
  *      ),
+ *      @OA\Property(
+ *          property="score",
+ *          description="score",
+ *          type="number"
+ *      ),
+ *      @OA\Property(
+ *          property="max_score",
+ *          description="max_score",
+ *          type="number"
+ *      ),
+ *      @OA\Property(
+ *          property="graded_at",
+ *          description="graded_at",
+ *          type="string",
+ *          format="date-time"
+ *      ),
  * )
  *
  * @mixin ProjectSolution
@@ -50,6 +66,9 @@ class ProjectSolutionResource extends JsonResource
             'file_name' => basename($this->path),
             'topic_id' => $this->topic_id,
             'user_id' => $this->user_id,
+            'score' => $this->score,
+            'max_score' => optional($this->topic->topicable)->max_score,
+            'graded_at' => $this->graded_at,
         ];
     }
 }
