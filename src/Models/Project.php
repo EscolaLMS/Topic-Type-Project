@@ -31,6 +31,11 @@ use Illuminate\Support\Carbon;
  *          @OA\Items(
  *              type="integer",
  *          )
+ *      ),
+ *      @OA\Property(
+ *          property="counts_to_grade",
+ *          description="whether the project counts towards the final grade",
+ *          type="boolean"
  *      )
  * )
  */
@@ -41,6 +46,7 @@ use Illuminate\Support\Carbon;
  * @property int $id
  * @property string $value
  * @property array $notify_users
+ * @property bool $counts_to_grade
  * @property Carbon $created_at
  * @property Carbon $updated_at
  *
@@ -52,7 +58,8 @@ class Project extends AbstractTopicContent
     public $table = 'topic_projects';
 
     protected $casts = [
-        'notify_users' => 'array'
+        'notify_users' => 'array',
+        'counts_to_grade' => 'boolean',
     ];
 
     protected $attributes = [
@@ -61,7 +68,8 @@ class Project extends AbstractTopicContent
 
     protected $fillable = [
         'value',
-        'notify_users'
+        'notify_users',
+        'counts_to_grade',
     ];
 
     public static function rules(): array
@@ -69,6 +77,7 @@ class Project extends AbstractTopicContent
         return [
             'value' => ['required', 'string'],
             'notify_users' => ['array'],
+            'counts_to_grade' => ['boolean'],
         ];
     }
 
