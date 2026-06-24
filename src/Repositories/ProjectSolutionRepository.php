@@ -25,12 +25,13 @@ class ProjectSolutionRepository extends BaseRepository implements ProjectSolutio
     public function findById(int $id): ProjectSolution
     {
         /** @var ProjectSolution */
-        return $this->model->newQuery()->findOrFail($id);
+        return $this->model->newQuery()->with('topic.topicable')->findOrFail($id);
     }
 
     public function findByCriteria(array $criteria, int $perPage): LengthAwarePaginator
     {
         return $this->queryWithAppliedCriteria($criteria)
+            ->with('topic.topicable')
             ->paginate($perPage);
     }
 }
