@@ -24,6 +24,7 @@ class TopicTypeProjectPermissionSeeder extends Seeder
             TopicTypeProjectPermissionEnum::CREATE_OWN_PROJECT_SOLUTION,
             TopicTypeProjectPermissionEnum::LIST_OWN_PROJECT_SOLUTION,
             TopicTypeProjectPermissionEnum::DELETE_OWN_PROJECT_SOLUTION,
+            TopicTypeProjectPermissionEnum::READ_OWN_PROJECT_SOLUTION,
         ]);
     }
 }

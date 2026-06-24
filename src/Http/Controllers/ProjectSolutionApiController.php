@@ -7,6 +7,7 @@ use EscolaLms\TopicTypeProject\Http\Controllers\Swagger\ProjectSolutionApiSwagge
 use EscolaLms\TopicTypeProject\Http\Requests\CreateProjectSolutionRequest;
 use EscolaLms\TopicTypeProject\Http\Requests\DeleteProjectSolutionRequest;
 use EscolaLms\TopicTypeProject\Http\Requests\ListProjectSolutionRequest;
+use EscolaLms\TopicTypeProject\Http\Requests\ReadProjectSolutionRequest;
 use EscolaLms\TopicTypeProject\Http\Resources\ProjectSolutionResource;
 use EscolaLms\TopicTypeProject\Services\Contracts\ProjectSolutionServiceContract;
 use Illuminate\Http\JsonResponse;
@@ -32,6 +33,11 @@ class ProjectSolutionApiController extends EscolaLmsBaseController implements Pr
         $result = $this->projectSolutionService->create($request->getCreateProjectSolutionDto());
 
         return $this->sendResponseForResource(ProjectSolutionResource::make($result), __('Project solution created successfully'));
+    }
+
+    public function read(ReadProjectSolutionRequest $request): JsonResponse
+    {
+        return $this->sendResponseForResource(ProjectSolutionResource::make($request->getProjectSolution()));
     }
 
     public function delete(DeleteProjectSolutionRequest $request): JsonResponse

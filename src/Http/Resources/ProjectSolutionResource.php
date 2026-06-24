@@ -35,6 +35,11 @@ use Illuminate\Support\Facades\Storage;
  *          description="user_id",
  *          type="number"
  *      ),
+ *      @OA\Property(
+ *          property="tutor_feedback",
+ *          description="tutor feedback (rich text or video link)",
+ *          type="string"
+ *      ),
  * )
  *
  * @mixin ProjectSolution
@@ -50,6 +55,7 @@ class ProjectSolutionResource extends JsonResource
             'file_name' => basename($this->path),
             'topic_id' => $this->topic_id,
             'user_id' => $this->user_id,
+            'tutor_feedback' => $this->tutor_feedback,
         ];
     }
 }
