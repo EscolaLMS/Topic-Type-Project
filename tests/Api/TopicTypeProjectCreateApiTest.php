@@ -85,6 +85,27 @@ class TopicTypeProjectCreateApiTest extends TestCase
         $this->assertFalse($project->counts_to_grade);
     }
 
+    public function testCreateTopicProjectWithMaxScore(): void
+    {
+        $lesson = Lesson::factory()
+            ->for(Course::factory())
+            ->create();
+
+        $this->response = $this->actingAs($this->makeAdmin(), 'api')
+            ->postJson('/api/admin/topics', [
+                'title' => 'Hello World',
+                'lesson_id' => $lesson->getKey(),
+                'topicable_type' => Project::class,
+                'value' => 'lorem ipsum',
+                'max_score' => 25,
+            ])
+            ->assertCreated();
+
+        $project = Project::find($this->response->getData()->data->topicable->id);
+
+        $this->assertEquals(25, $project->max_score);
+    }
+
     public function testCreateTopicProjectWithCountsToGrade(): void
     {
         $lesson = Lesson::factory()

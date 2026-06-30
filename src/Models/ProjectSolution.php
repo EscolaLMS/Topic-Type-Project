@@ -17,11 +17,15 @@ use Illuminate\Support\Carbon;
  * @property string $path
  * @property int $topic_id
  * @property int $user_id
+ * @property ?float $score
+ * @property ?int $graded_by
+ * @property ?Carbon $graded_at
  * @property Carbon $created_at
  * @property Carbon $updated_at
  *
  * @property-read User $user
  * @property-read Topic $topic
+ * @property-read ?User $gradedBy
  *
  */
 class ProjectSolution extends Model
@@ -34,6 +38,14 @@ class ProjectSolution extends Model
         'path',
         'topic_id',
         'user_id',
+        'score',
+        'graded_by',
+        'graded_at',
+    ];
+
+    protected $casts = [
+        'score' => 'float',
+        'graded_at' => 'datetime',
     ];
 
     public function topic(): BelongsTo
@@ -44,6 +56,11 @@ class ProjectSolution extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function gradedBy(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'graded_by');
     }
 
     public static function newFactory(): ProjectSolutionFactory
