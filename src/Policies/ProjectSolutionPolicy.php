@@ -27,6 +27,22 @@ class ProjectSolutionPolicy
             && $projectSolution->user_id === $user->getKey();
     }
 
+    public function readOwn(User $user, ProjectSolution $projectSolution): bool
+    {
+        return $user->can(TopicTypeProjectPermissionEnum::READ_OWN_PROJECT_SOLUTION)
+            && $projectSolution->user_id === $user->getKey();
+    }
+
+    public function read(User $user, ProjectSolution $projectSolution): bool
+    {
+        return $user->can(TopicTypeProjectPermissionEnum::READ_PROJECT_SOLUTION);
+    }
+
+    public function update(User $user, ProjectSolution $projectSolution): bool
+    {
+        return $user->can(TopicTypeProjectPermissionEnum::UPDATE_PROJECT_SOLUTION);
+    }
+
     public function delete(User $user, ProjectSolution $projectSolution): bool
     {
         return $user->can(TopicTypeProjectPermissionEnum::DELETE_PROJECT_SOLUTION);

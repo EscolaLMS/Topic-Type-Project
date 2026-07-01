@@ -5,6 +5,7 @@ namespace EscolaLms\TopicTypeProject\Http\Controllers\Swagger;
 use EscolaLms\TopicTypeProject\Http\Requests\CreateProjectSolutionRequest;
 use EscolaLms\TopicTypeProject\Http\Requests\DeleteProjectSolutionRequest;
 use EscolaLms\TopicTypeProject\Http\Requests\ListProjectSolutionRequest;
+use EscolaLms\TopicTypeProject\Http\Requests\ReadProjectSolutionRequest;
 use Illuminate\Http\JsonResponse;
 
 interface ProjectSolutionApiSwagger
@@ -100,6 +101,46 @@ interface ProjectSolutionApiSwagger
      * )
      */
     public function index(ListProjectSolutionRequest $request): JsonResponse;
+
+    /**
+     * @OA\Get(
+     *      path="/api/topic-project-solutions/{id}",
+     *      summary="Get a single project solution",
+     *      tags={"Project Solution"},
+     *      description="Get my single project solution (with tutor feedback) by id",
+     *      security={
+     *          {"passport": {}},
+     *      },
+     *      @OA\Parameter(
+     *          name="id",
+     *          description="ID",
+     *          required=true,
+     *          in="path",
+     *          @OA\Schema(
+     *             type="integer",
+     *         ),
+     *      ),
+     *      @OA\Response(
+     *          response=200,
+     *          description="successful operation",
+     *          @OA\MediaType(
+     *              mediaType="application/json",
+     *              @OA\Schema(
+     *                  type="object",
+     *                  @OA\Property(
+     *                      property="success",
+     *                      type="boolean"
+     *                  ),
+     *                  @OA\Property(
+     *                      property="data",
+     *                      ref="#/components/schemas/ProjectSolutionResource"
+     *                  )
+     *              )
+     *          )
+     *      )
+     * )
+     */
+    public function read(ReadProjectSolutionRequest $request): JsonResponse;
 
     /**
      * @OA\Post(

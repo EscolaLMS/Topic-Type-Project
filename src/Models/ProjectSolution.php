@@ -17,6 +17,7 @@ use Illuminate\Support\Carbon;
  * @property string $path
  * @property int $topic_id
  * @property int $user_id
+ * @property string|null $tutor_feedback
  * @property Carbon $created_at
  * @property Carbon $updated_at
  *
@@ -34,6 +35,11 @@ class ProjectSolution extends Model
         'path',
         'topic_id',
         'user_id',
+        'tutor_feedback',
+    ];
+
+    protected $casts = [
+        'tutor_feedback' => 'string',
     ];
 
     public function topic(): BelongsTo
