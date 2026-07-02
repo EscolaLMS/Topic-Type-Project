@@ -11,9 +11,11 @@ abstract class ProjectSolutionEvent
 {
     use Dispatchable, SerializesModels;
 
-    private User $user;
+    // Public so SerializesModels can restore them when the event is queued
+    // (private typed properties on this base class stay uninitialized after deserialization).
+    public User $user;
 
-    private ProjectSolution $projectSolution;
+    public ProjectSolution $projectSolution;
 
     public function __construct(User $user, ProjectSolution $projectSolution)
     {
