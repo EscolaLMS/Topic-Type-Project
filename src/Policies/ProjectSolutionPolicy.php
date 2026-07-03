@@ -48,11 +48,6 @@ class ProjectSolutionPolicy
         return $user->can(TopicTypeProjectPermissionEnum::DELETE_PROJECT_SOLUTION);
     }
 
-    public function update(User $user, ProjectSolution $projectSolution): bool
-    {
-        return $user->can(TopicTypeProjectPermissionEnum::UPDATE_PROJECT_SOLUTION);
-    }
-
     public function list(User $user): bool
     {
         return $user->can(TopicTypeProjectPermissionEnum::LIST_PROJECT_SOLUTION);
