@@ -7,6 +7,8 @@ use EscolaLms\TopicTypeProject\Http\Controllers\Admin\Swagger\ProjectSolutionApi
 use EscolaLms\TopicTypeProject\Http\Requests\Admin\AdminDeleteProjectSolutionRequest;
 use EscolaLms\TopicTypeProject\Http\Requests\Admin\AdminGradeProjectSolutionRequest;
 use EscolaLms\TopicTypeProject\Http\Requests\Admin\AdminListProjectSolutionRequest;
+use EscolaLms\TopicTypeProject\Http\Requests\Admin\AdminReadProjectSolutionRequest;
+use EscolaLms\TopicTypeProject\Http\Requests\Admin\AdminUpdateProjectSolutionFeedbackRequest;
 use EscolaLms\TopicTypeProject\Http\Resources\ProjectSolutionResource;
 use EscolaLms\TopicTypeProject\Services\Contracts\ProjectSolutionServiceContract;
 use Illuminate\Http\JsonResponse;
@@ -25,6 +27,18 @@ class ProjectSolutionApiAdminController extends EscolaLmsBaseController implemen
         $results = $this->projectSolutionService->findAll($request->getCriteria(), $request->getPage());
 
         return $this->sendResponseForResource(ProjectSolutionResource::collection($results));
+    }
+
+    public function read(AdminReadProjectSolutionRequest $request): JsonResponse
+    {
+        return $this->sendResponseForResource(ProjectSolutionResource::make($request->getProjectSolution()));
+    }
+
+    public function feedback(AdminUpdateProjectSolutionFeedbackRequest $request): JsonResponse
+    {
+        $result = $this->projectSolutionService->updateFeedback($request->getId(), $request->getFeedback());
+
+        return $this->sendResponseForResource(ProjectSolutionResource::make($result), __('Updated successfully'));
     }
 
     public function delete(AdminDeleteProjectSolutionRequest $request): JsonResponse

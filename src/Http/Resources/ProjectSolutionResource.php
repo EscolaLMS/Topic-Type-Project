@@ -36,6 +36,11 @@ use Illuminate\Support\Facades\Storage;
  *          type="number"
  *      ),
  *      @OA\Property(
+ *          property="tutor_feedback",
+ *          description="tutor feedback (rich text or video link)",
+ *          type="string"
+ *      ),
+ *      @OA\Property(
  *          property="score",
  *          description="score",
  *          type="number"
@@ -66,6 +71,7 @@ class ProjectSolutionResource extends JsonResource
             'file_name' => basename($this->path),
             'topic_id' => $this->topic_id,
             'user_id' => $this->user_id,
+            'tutor_feedback' => $this->tutor_feedback,
             'score' => $this->score,
             'max_score' => optional($this->topic->topicable)->max_score,
             'graded_at' => $this->graded_at,

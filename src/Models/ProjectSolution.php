@@ -17,6 +17,7 @@ use Illuminate\Support\Carbon;
  * @property string $path
  * @property int $topic_id
  * @property int $user_id
+ * @property string|null $tutor_feedback
  * @property ?float $score
  * @property ?int $graded_by
  * @property ?Carbon $graded_at
@@ -38,12 +39,14 @@ class ProjectSolution extends Model
         'path',
         'topic_id',
         'user_id',
+        'tutor_feedback',
         'score',
         'graded_by',
         'graded_at',
     ];
 
     protected $casts = [
+        'tutor_feedback' => 'string',
         'score' => 'float',
         'graded_at' => 'datetime',
     ];

@@ -39,6 +39,19 @@ class ProjectSolutionService implements ProjectSolutionServiceContract
         return $this->projectSolutionRepository->findByCriteria($criteria, $pageDto->getPerPage());
     }
 
+    public function findById(int $id): ProjectSolution
+    {
+        return $this->projectSolutionRepository->findById($id);
+    }
+
+    public function updateFeedback(int $id, ?string $feedback): ProjectSolution
+    {
+        /** @var ProjectSolution */
+        return $this->projectSolutionRepository->update([
+            'tutor_feedback' => $feedback === '' ? null : $feedback,
+        ], $id);
+    }
+
     public function create(CreateProjectSolutionDto $dto): ProjectSolution
     {
         $path = $dto->getFile()->storeAs(
