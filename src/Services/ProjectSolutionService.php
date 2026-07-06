@@ -9,6 +9,7 @@ use EscolaLms\TopicTypeProject\Dtos\CriteriaDto;
 use EscolaLms\TopicTypeProject\Dtos\GradeProjectSolutionDto;
 use EscolaLms\TopicTypeProject\Dtos\PageDto;
 use EscolaLms\TopicTypeProject\Events\ProjectSolutionCreatedEvent;
+use EscolaLms\TopicTypeProject\Events\ProjectSolutionGradedEvent;
 use EscolaLms\TopicTypeProject\Models\ProjectSolution;
 use EscolaLms\TopicTypeProject\Repositories\Contracts\ProjectSolutionRepositoryContract;
 use EscolaLms\TopicTypeProject\Services\Contracts\ProjectSolutionServiceContract;
@@ -83,6 +84,13 @@ class ProjectSolutionService implements ProjectSolutionServiceContract
         $solution->update(array_merge($dto->toArray(), [
             'graded_at' => now(),
         ]));
+
+        // A graded solution is fully graded by definition (a lecturer set the score),
+        // so signal the journal right away; re-grading emits again for an idempotent upsert.
+        $project = $solution->topic->topicable;
+        if ($project && $project->counts_to_grade) {
+            event(new ProjectSolutionGradedEvent($solution->user, $solution));
+        }
 
         return $solution;
     }
