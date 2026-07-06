@@ -18,6 +18,7 @@ class ProjectResource extends JsonResource implements TopicTypeResourceContract
             'value' => $this->value,
             'notify_users' => $this->notify_users,
             'counts_to_grade' => $this->counts_to_grade,
+            'max_score' => $this->max_score,
         ];
     }
 }

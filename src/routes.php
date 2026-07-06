@@ -10,6 +10,7 @@ Route::prefix('api')->middleware(['auth:api'])->group(function () {
             Route::get(null, [ProjectSolutionApiAdminController::class, 'index']);
             Route::get('{id}', [ProjectSolutionApiAdminController::class, 'read']);
             Route::patch('{id}/feedback', [ProjectSolutionApiAdminController::class, 'feedback']);
+            Route::patch('{id}/grade', [ProjectSolutionApiAdminController::class, 'grade']);
             Route::delete('{id}', [ProjectSolutionApiAdminController::class, 'delete']);
         });
     });
