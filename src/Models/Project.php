@@ -3,6 +3,7 @@
 namespace EscolaLms\TopicTypeProject\Models;
 
 use EscolaLms\TopicTypeProject\Database\Factories\ProjectFactory;
+use EscolaLms\TopicTypeProject\Events\ProjectGradabilityChangedEvent;
 use EscolaLms\TopicTypes\Facades\Markdown;
 use EscolaLms\TopicTypes\Models\TopicContent\AbstractTopicContent;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -103,5 +104,16 @@ class Project extends AbstractTopicContent
     public function getMorphClass()
     {
         return self::class;
+    }
+
+    protected static function booted(): void
+    {
+        parent::booted();
+
+        static::updated(function (Project $project) {
+            if ($project->wasChanged('counts_to_grade')) {
+                event(new ProjectGradabilityChangedEvent($project));
+            }
+        });
     }
 }
