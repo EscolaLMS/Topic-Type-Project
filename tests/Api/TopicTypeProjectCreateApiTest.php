@@ -128,6 +128,48 @@ class TopicTypeProjectCreateApiTest extends TestCase
         $this->assertTrue($project->counts_to_grade);
     }
 
+    public function testCreateTopicProjectDefaultsWeightToOne(): void
+    {
+        $lesson = Lesson::factory()
+            ->for(Course::factory())
+            ->create();
+
+        $this->response = $this->actingAs($this->makeAdmin(), 'api')
+            ->postJson('/api/admin/topics', [
+                'title' => 'Hello World',
+                'lesson_id' => $lesson->getKey(),
+                'topicable_type' => Project::class,
+                'value' => 'lorem ipsum',
+            ])
+            ->assertCreated();
+
+        $project = Project::find($this->response->getData()->data->topicable->id);
+
+        $this->assertEquals(1, $project->weight);
+    }
+
+    public function testCreateTopicProjectWithWeight(): void
+    {
+        $lesson = Lesson::factory()
+            ->for(Course::factory())
+            ->create();
+
+        $this->response = $this->actingAs($this->makeAdmin(), 'api')
+            ->postJson('/api/admin/topics', [
+                'title' => 'Hello World',
+                'lesson_id' => $lesson->getKey(),
+                'topicable_type' => Project::class,
+                'value' => 'lorem ipsum',
+                'weight' => 5,
+            ])
+            ->assertCreated()
+            ->assertJsonFragment(['weight' => 5]);
+
+        $project = Project::find($this->response->getData()->data->topicable->id);
+
+        $this->assertEquals(5, $project->weight);
+    }
+
     public function testCreateTopicProjectNotifyUsersNullArray(): void
     {
         $lesson = Lesson::factory()

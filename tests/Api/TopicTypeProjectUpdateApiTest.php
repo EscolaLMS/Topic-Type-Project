@@ -69,4 +69,22 @@ class TopicTypeProjectUpdateApiTest extends TestCase
 
         $this->assertTrue($project->counts_to_grade);
     }
+
+    public function testUpdateTopicProjectAcceptsWeight(): void
+    {
+        $response = $this->actingAs($this->user, 'api')
+            ->postJson('/api/admin/topics/' . $this->topic->getKey(), [
+                'title' => 'Hello World',
+                'lesson_id' => $this->topic->lesson_id,
+                'topicable_type' => Project::class,
+                'value' => 'lorem ipsum',
+                'weight' => 5,
+            ])
+            ->assertOk()
+            ->assertJsonFragment(['weight' => 5]);
+
+        $project = Project::find($response->getData()->data->topicable->id);
+
+        $this->assertEquals(5, $project->weight);
+    }
 }
